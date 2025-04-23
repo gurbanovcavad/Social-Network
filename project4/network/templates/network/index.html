@@ -1,5 +1,7 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+    {% if user.is_authenticated %} 
+        <a href="{% url 'new_post' %}" style="margin-left: 10px;">New Post</a>
+    {% endif %}
 {% endblock %}

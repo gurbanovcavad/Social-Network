@@ -10,7 +10,7 @@
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Network</a>
+            <a class="navbar-brand" href="{% url 'index' %}">Network</a>
           
             <div>
               <ul class="navbar-nav mr-auto">
@@ -39,6 +39,9 @@
                 {% endif %}
               </ul>
             </div>
+            {% if message %}
+                <div>{{message}}</div>
+            {% endif %}
           </nav>
         
         <div class="body">

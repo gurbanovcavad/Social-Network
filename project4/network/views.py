@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Post
 
 
 def index(request):
@@ -27,8 +27,7 @@ def login_view(request):
             return render(request, "network/login.html", {
                 "message": "Invalid username and/or password."
             })
-    else:
-        return render(request, "network/login.html")
+    return render(request, "network/login.html")
 
 
 def logout_view(request):
@@ -59,5 +58,16 @@ def register(request):
             })
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "network/register.html")
+    return render(request, "network/register.html")
+
+def new_post(request):
+    if request.method == 'POST':
+        try:
+            body = request.POST.get('body')
+            post = Post(owner=request.user, body=body)
+            post.save()
+        except:
+            return render(request, 'network/index.html', {'message': 'Something went wrong!'})
+        print("success")
+        return render(request, 'network/index.html')
+    return render(request, 'network/newpost.html')
