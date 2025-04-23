@@ -7,7 +7,7 @@ class User(AbstractUser):
 
 class Post(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
-    body = models.TextField()
+    body = models.TextField(blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

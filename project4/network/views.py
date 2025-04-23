@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .models import User, Post
@@ -64,10 +64,12 @@ def new_post(request):
     if request.method == 'POST':
         try:
             body = request.POST.get('body')
+            if not body: 
+                raise Exception()
             post = Post(owner=request.user, body=body)
             post.save()
         except:
             return render(request, 'network/index.html', {'message': 'Something went wrong!'})
         print("success")
-        return render(request, 'network/index.html')
+        return redirect(reverse('index'))
     return render(request, 'network/newpost.html')

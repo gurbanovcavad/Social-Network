@@ -39,14 +39,15 @@
                 {% endif %}
               </ul>
             </div>
-            {% if message %}
-                <div>{{message}}</div>
-            {% endif %}
           </nav>
         
         <div class="body">
-            {% block body %}
-            {% endblock %}
+            {% if message %}
+                <div style="font-size: 25px; font-weight: bold; margin-left: 10px;">{{message}}</div>
+            {% else %}
+                {% block body %}
+                {% endblock %}
+            {% endif %}
         </div>
     </body>
 </html>
