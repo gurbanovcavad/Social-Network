@@ -73,3 +73,8 @@ def new_post(request):
         print("success")
         return redirect(reverse('index'))
     return render(request, 'network/newpost.html')
+
+def all_posts(request):
+    posts = Post.objects.order_by('-created_at').all()
+    context = {'posts': posts}
+    return render(request, 'network/all_posts.html', context)
