@@ -19,3 +19,18 @@
 .like {
     color: rgb(81, 81, 81);
 }
+
+#profile {
+    margin: 10px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+#follow {
+    margin: 10px;
+    font-size: 15px; 
+}
+
+#following {
+    margin: 5px;
+}
