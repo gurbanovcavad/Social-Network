@@ -34,3 +34,10 @@
 #following {
     margin: 5px;
 }
+
+#follow_btn {
+    margin: 10px;
+    background: none;
+    border: 0px;
+    color: rgb(5, 100, 255);
+}

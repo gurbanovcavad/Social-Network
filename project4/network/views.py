@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import User, Post, Follow
 
@@ -117,3 +118,15 @@ def follow(request):
         except:
             return JsonResponse({'message': 'Something went wrong!'}, status=400)
         return JsonResponse({'message': 'Success!'}, status=200)
+  
+@login_required  
+def following_posts(request, id):
+    user = User.objects.get(pk=id)
+    following = user.following.all()
+    posts = []
+    for i in following:
+        posts += i.posts.all()
+    context = {
+        "posts": posts,
+    }
+    return render(request, 'network/all_posts.html', context)

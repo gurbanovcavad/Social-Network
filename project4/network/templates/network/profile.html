@@ -1,4 +1,9 @@
 {% extends 'network/layout.html' %}
+{% load static %}
+
+{% block script %}
+    <script src="{% static 'network/script.js' %}"></script>
+{% endblock %}
 
 {% block body %}
     <div id="profile">{{us.username}}</div>
@@ -6,8 +11,8 @@
         <span id="followers">Followers: {{followers}}</span>
         <span id="following">Following: {{following}}</span>
     </div>
-    {% if request.user.username != username %} 
-        <div id="follow_btn">{%if is_following %} Unfollow {% else %} Follow {% endif %}</div>
+    {% if request.user.id != us.id %} 
+        <button id="follow_btn">{%if is_following %} Unfollow {% else %} Follow {% endif %}</button>
     {% endif %}
     {% for post in posts %}
         <div>
