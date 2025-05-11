@@ -4,7 +4,7 @@
     {% for post in posts %}
         <div>
             <div class="post">
-                <div id="username">{{post.owner}}</div>
+                <div id="username"><a href="{% url 'profile' post.owner %}">{{post.owner}}</a></div>
                 {% if request.user == post.owner %}
                     <a class="nav-link" style="padding: 0px !important;" href="#">Edit</a>
                 {% endif %}

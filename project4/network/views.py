@@ -4,6 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 from .models import User, Post, Follow
 
@@ -98,26 +100,31 @@ def profile(request, username):
 def get_user_info(request, username):
     user = User.objects.get(username=username)
     context = {
-        'cur': request.user,
-        'user': user,
-        'is_following': Follow.objects.filter(follower=request.user, followee=user).exists(),
+        'cur': request.user.id,
+        'user': user.id,
+        'is_following': (True if Follow.objects.filter(follower=request.user.id, followee=user) else False)
     }
     return JsonResponse(context, status=200)
 
+@csrf_exempt
 def follow(request):
     if request.method == 'POST':
-        cur = request.POST.get('cur')
-        user = request.POST.get('user')
-        to_follow = request.POST.get('follow')
+        data = json.loads(request.body)
+        print(data)
+        to_follow = data.get('follow')
+        user = data.get('user')
+        cur = data.get('cur')
+        print(to_follow, user, cur)
         try:
-            if to_follow == 'true':
-                follow = Follow(follower=cur, followee=user)
+            if to_follow:
+                follow = Follow(follower=User.objects.get(pk=cur), followee=User.objects.get(pk=user))
                 follow.save()
             else:
                 Follow.objects.filter(follower=cur, followee=user).delete()
         except:
             return JsonResponse({'message': 'Something went wrong!'}, status=400)
         return JsonResponse({'message': 'Success!'}, status=200)
+    return JsonResponse({'message': 'Invalid request!'}, status=400)
   
 @login_required  
 def following_posts(request, id):
@@ -125,7 +132,8 @@ def following_posts(request, id):
     following = user.following.all()
     posts = []
     for i in following:
-        posts += i.posts.all()
+        x = User.objects.get(pk=i.followee.id)
+        posts += x.posts.all()
     context = {
         "posts": posts,
     }
