@@ -2,11 +2,11 @@
 
 {% block body %}
     {% for post in posts %}
-        <div>
+        <div id="posts">
             <div class="post">
                 <div id="username"><a href="{% url 'profile' post.owner %}">{{post.owner}}</a></div>
                 {% if request.user == post.owner %}
-                    <a class="nav-link" style="padding: 0px !important;" href="#">Edit</a>
+                    <a class="nav-link" style="padding: 0px !important;" href="{% url 'edit_post' post.id %}">Edit</a>
                 {% endif %}
                 <div id="content">{{post.body}}</div>
                 <div id="time">{{post.created_at}}</div>

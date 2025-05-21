@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 from .models import User, Post, Follow
+from .forms import PostForm
 
 
 def index(request):
@@ -137,4 +138,22 @@ def following_posts(request, id):
     context = {
         "posts": posts,
     }
-    return render(request, 'network/all_posts.html', context)
+    return render(request, 'network/all_posts.html', context)   
+
+def edit_post(request, id):
+    post = Post.objects.get(pk=id)
+    print(post)
+    if request.method == 'POST':
+        body = request.POST.get('body')
+        if not body:
+            return render(request, 'network/index.html', {'message': 'Something went wrong!'})
+        post.body = body
+        post.save()
+        return redirect(reverse('all_posts'))
+    form = PostForm(instance=post)
+    print(form)
+    context = {
+        'form': form,
+        'post': post,
+    }
+    return render(request, 'network/edit_post.html', context)
