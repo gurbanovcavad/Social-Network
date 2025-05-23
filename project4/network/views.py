@@ -140,8 +140,11 @@ def following_posts(request, id):
     }
     return render(request, 'network/all_posts.html', context)   
 
+@login_required
 def edit_post(request, id):
     post = Post.objects.get(pk=id)
+    if request.user != post.owner:
+        return render(request, 'network/index.html', {'message': 'You are not allowed to edit this post!'})
     print(post)
     if request.method == 'POST':
         body = request.POST.get('body')
